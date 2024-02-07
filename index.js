@@ -1,8 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-var { graphqlHTTP } = require("express-graphql")
-var { buildSchema } = require("graphql")
+let { graphqlHTTP } = require("express-graphql");
+const user = require('./graphql/schema/user');
+const resolver = require('./graphql/resolver/resolver');
+const User = require('./models/UserSchema');
+const Employee = require('./models/EmployeeSchema');
 
 const app = express();
 
@@ -19,35 +22,13 @@ db.once('open', () => {console.log('connected to database!')});
 
 
 
-var schema = buildSchema(`
-  type Query {
-    hello: String
-    signup: String
-  }
-
-  type Mutation {
-    signup: String
-  }
-`)
-
-
-
-
-var root = {
-  hello: () => {
-    return "Hello world"
-  },
-  signup: () => {
-    return "signup endpoint"
-  }
-}
-
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: schema,
-    rootValue: root,
+    schema: user,
+    rootValue: resolver,
     graphiql: true,
+    context: {User, Employee}
   })
 )
 app.listen(PORT, () => {

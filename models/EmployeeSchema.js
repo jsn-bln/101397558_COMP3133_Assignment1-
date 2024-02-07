@@ -21,7 +21,7 @@ const employeeSchema = mongoose.Schema({
         required: true
     },
     salary: {
-        type: Float,
+        type: Number,
         required: true
     }
 })
