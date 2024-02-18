@@ -8,6 +8,15 @@ const resolvers = {
       await user.save();
       return user;
     },
+    addEmployee: async (_, { firstname, lastname, email, gender, salary }, {Employee}) => {
+      try {
+        const newEmployee = new Employee({ firstname, lastname, email, gender, salary });
+        await newEmployee.save();
+        return newEmployee;
+      } catch (error) {
+        throw new Error('Failed to add employee: ' + error.message);
+      }
+    }
   },
   Query: {
     login: async (_, { email, password }, { User }) => {
